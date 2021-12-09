@@ -8,7 +8,7 @@ build: # Build new image
 	@docker build -t $(IMAGE_TAG) .
 
 drop:
-	@docker ps -a | grep $(PROJECT_NAME) | xargs docker rm -f
+	@docker ps -a | grep $(PROJECT_NAME) | awk '{ print $$1 }' xargs docker rm -f
 
 up:
 	@docker run -it -p 9900:9900 --rm -d --name $(PROJECT_NAME) $(IMAGE_TAG)
