@@ -11,4 +11,4 @@ drop:
 	@docker ps -a | grep $(PROJECT_NAME) | xargs docker rm -f
 
 up:
-	@docker run -it --rm -d --name $(PROJECT_NAME) $(IMAGE_TAG)
+	@docker run -it -p 9900:9900 --rm -d --name $(PROJECT_NAME) $(IMAGE_TAG)
