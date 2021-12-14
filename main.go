@@ -76,13 +76,15 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 	content := clearContent(body)
 	if !isJSON([]byte(content)) {
-		response := &response{
-			Error:   true,
-			Message: "Invalid response.",
-			Detail:  "Response is not json value.",
-		}
+		//response := &response{
+		//	Error:   true,
+		//	Message: "Invalid response.",
+		//	Detail:  "Response is not json value.",
+		//}
+		//
+		//writeResponse(w, response)
 
-		writeResponse(w, response)
+		w.Write([]byte(content))
 		return
 	}
 
@@ -90,9 +92,11 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func clearContent(content string) string {
-	r := regexp.MustCompile(`(,)([\s\n]*[\]\}])`)
+	commaRegex := regexp.MustCompile(`(,)([\s\n]*[\]\}])`)
+	result := commaRegex.ReplaceAllString(content, "$2")
 
-	return r.ReplaceAllString(content, "$2")
+	commentRegex := regexp.MustCompile(`"?/\*/"?`)
+	return commentRegex.ReplaceAllString(result, "")
 }
 
 func getContent(url string, method string) (string, error) {
